@@ -35,11 +35,17 @@ jobs:
         path: list
         sparse-checkout: 'public_suffix_list.dat'
         sparse-checkout-cone-mode: false
+    - name: Check if zone is up to date
+      env:
+        TOKEN: ${{ secrets.DESEC_TOKEN }}
+      run: 'echo $(curl -sS --fail-with-body https://desec.io/api/v1/domains/query.publicsuffix.zone/rrsets/@/TXT/ -H@<(cat <<< "Authorization: Token ${TOKEN}") | jq .records[0] | egrep -o "[0-9a-f]{64}") list/public_suffix_list.dat | sha256sum -c'
     - name: Run sync
+      if: ${{ failure() }}
       env:
         TOKEN: ${{ secrets.DESEC_TOKEN }}
       working-directory: ./desec-tools
       run: psl-dns_parse ../list/public_suffix_list.dat | ./patch_zone.sh query.publicsuffix.zone -
     - name: Print PATCH request data
+      if: ${{ failure() }}
       working-directory: ./desec-tools
       run: cat *.json
