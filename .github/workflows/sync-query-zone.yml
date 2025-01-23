@@ -43,6 +43,3 @@ jobs:
     - name: Print PATCH request data
       working-directory: ./desec-tools
       run: cat *.json
-    - name: Print log
-      working-directory: ./desec-tools
-      run: cat *.log
