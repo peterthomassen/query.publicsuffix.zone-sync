@@ -38,6 +38,7 @@ jobs:
     - name: Check if zone is up to date
       env:
         TOKEN: ${{ secrets.DESEC_TOKEN }}
+      continue-on-error: true
       run: 'echo $(curl -sS --fail-with-body https://desec.io/api/v1/domains/query.publicsuffix.zone/rrsets/@/TXT/ -H@<(cat <<< "Authorization: Token ${TOKEN}") | jq .records[0] | egrep -o "[0-9a-f]{64}") list/public_suffix_list.dat | sha256sum -c'
     - name: Run sync
       if: ${{ failure() }}
