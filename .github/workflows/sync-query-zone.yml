@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Check out PSL
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         repository: publicsuffix/list
         path: list
@@ -31,7 +31,7 @@ jobs:
 
     - name: Set up Python
       if: steps.check.outcome == 'failure'
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v7
       with:
         python-version: "3.13"
     - name: Install dependencies
@@ -41,7 +41,7 @@ jobs:
         pip install psl-dns requests
     - name: Check out sync tools
       if: steps.check.outcome == 'failure'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         repository: desec-io/desec-tools
         path: desec-tools
